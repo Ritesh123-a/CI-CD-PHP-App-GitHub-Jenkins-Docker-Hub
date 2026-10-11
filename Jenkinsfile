@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "yourdockerhubuser/php-app"
+        IMAGE_NAME = "ritesh4755/php"
         IMAGE_TAG  = "${BUILD_NUMBER}"
-        DOCKER_CREDS = credentials('dockerhub-creds')
+        DOCKER_CREDS = credentials('b2acaf23-7b1a-4ce0-a465-fce5e4f176d0')
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<user>/php-app.git'
+                git branch: 'master', url: https://github.com/Ritesh123-a/CI-CD-PHP-App-GitHub-Jenkins-Docker-Hub.git'
             }
         }
 
