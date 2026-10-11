@@ -1,0 +1,1 @@
+<?php echo "Hello from CI/CD pipeline - v1"; ?>
