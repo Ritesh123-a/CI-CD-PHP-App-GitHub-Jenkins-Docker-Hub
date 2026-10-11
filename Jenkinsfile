@@ -11,8 +11,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Ritesh123-a/CI-CD-PHP-App-GitHub-Jenkins-Docker-Hub.git'
+                checkout scm
             }
         }
 
@@ -27,7 +26,7 @@ pipeline {
                 sh '''
                 docker run -d --name test-$BUILD_NUMBER -p 9090:80 $IMAGE_NAME:$IMAGE_TAG
                 sleep 5
-                curl -f http://localhost:9090 || exit 1
+                curl -f http://localhost:9090
                 '''
             }
             post {
@@ -53,7 +52,7 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no $TARGET_HOST '
                         docker pull $IMAGE_NAME:latest &&
-                        docker rm -f php-app || true &&
+                        (docker rm -f php-app || true) &&
                         docker run -d --name php-app --restart always -p 80:80 $IMAGE_NAME:latest &&
                         docker image prune -f
                     '
@@ -66,7 +65,7 @@ pipeline {
     post {
         always {
             sh 'docker logout || true'
-            sh 'docker image prune -f'
+            sh 'docker image prune -f || true'
         }
         success { echo "Deployed ${IMAGE_NAME}:${IMAGE_TAG} to target server" }
         failure { echo "Pipeline failed, check console output" }
